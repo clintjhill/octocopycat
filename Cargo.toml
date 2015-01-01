@@ -1,0 +1,8 @@
+[package]
+
+name = "copy-octo-cat"
+version = "0.0.1"
+authors = ["Clint Hill <clint.hill@gmail.com>"]
+
+[dependencies.hyper]
+git = "https://github.com/hyperium/hyper.git"
