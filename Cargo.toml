@@ -1,8 +1,11 @@
 [package]
 
-name = "copy-octo-cat"
+name = "octocopycat"
 version = "0.0.1"
 authors = ["Clint Hill <clint.hill@gmail.com>"]
 
 [dependencies.hyper]
 git = "https://github.com/hyperium/hyper.git"
+
+[dependencies.toml]
+git = "https://github.com/alexcrichton/toml-rs.git"
