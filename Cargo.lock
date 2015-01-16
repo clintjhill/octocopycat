@@ -2,8 +2,8 @@
 name = "octocopycat"
 version = "0.0.1"
 dependencies = [
- "hyper 0.1.0 (git+https://github.com/hyperium/hyper.git)",
- "toml 0.1.11 (git+https://github.com/alexcrichton/toml-rs.git)",
+ "hyper 0.1.1 (git+https://github.com/hyperium/hyper.git)",
+ "toml 0.1.12 (git+https://github.com/alexcrichton/toml-rs.git)",
 ]
 
 [[package]]
@@ -12,7 +12,7 @@ version = "0.1.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "openssl 0.2.15 (registry+https://github.com/rust-lang/crates.io-index)",
- "rustc-serialize 0.2.7 (registry+https://github.com/rust-lang/crates.io-index)",
+ "rustc-serialize 0.2.8 (registry+https://github.com/rust-lang/crates.io-index)",
  "time 0.1.12 (registry+https://github.com/rust-lang/crates.io-index)",
  "url 0.2.16 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
@@ -24,15 +24,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
 name = "hyper"
-version = "0.1.0"
-source = "git+https://github.com/hyperium/hyper.git#9fbf0aecb8bcf22ef80c8e4c54911801d918a0fb"
+version = "0.1.1"
+source = "git+https://github.com/hyperium/hyper.git#8bf551b8426d9c2dcc66c2be2c750a839de68e67"
 dependencies = [
  "cookie 0.1.8 (registry+https://github.com/rust-lang/crates.io-index)",
  "log 0.1.9 (registry+https://github.com/rust-lang/crates.io-index)",
  "mime 0.0.6 (registry+https://github.com/rust-lang/crates.io-index)",
  "mucell 0.1.10 (registry+https://github.com/rust-lang/crates.io-index)",
  "openssl 0.2.15 (registry+https://github.com/rust-lang/crates.io-index)",
- "rustc-serialize 0.2.7 (registry+https://github.com/rust-lang/crates.io-index)",
+ "rustc-serialize 0.2.8 (registry+https://github.com/rust-lang/crates.io-index)",
  "time 0.1.12 (registry+https://github.com/rust-lang/crates.io-index)",
  "unicase 0.0.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "unsafe-any 0.2.1 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -41,10 +41,10 @@ dependencies = [
 
 [[package]]
 name = "libressl-pnacl-sys"
-version = "2.1.3"
+version = "2.1.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
- "pnacl-build-helper 1.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "pnacl-build-helper 1.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -86,7 +86,7 @@ name = "openssl-sys"
 version = "0.2.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
- "libressl-pnacl-sys 2.1.3 (registry+https://github.com/rust-lang/crates.io-index)",
+ "libressl-pnacl-sys 2.1.4 (registry+https://github.com/rust-lang/crates.io-index)",
  "pkg-config 0.1.4 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
@@ -97,7 +97,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
 name = "pnacl-build-helper"
-version = "1.1.0"
+version = "1.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
@@ -107,7 +107,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
 name = "rustc-serialize"
-version = "0.2.7"
+version = "0.2.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
@@ -120,10 +120,10 @@ dependencies = [
 
 [[package]]
 name = "toml"
-version = "0.1.11"
-source = "git+https://github.com/alexcrichton/toml-rs.git#d4319caa2073a8f7e14f4479d7f4d374357f890a"
+version = "0.1.12"
+source = "git+https://github.com/alexcrichton/toml-rs.git#34aaa5f38498ccb2eef53e67c742ceaa2c80865d"
 dependencies = [
- "rustc-serialize 0.2.7 (registry+https://github.com/rust-lang/crates.io-index)",
+ "rustc-serialize 0.2.8 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -142,6 +142,6 @@ version = "0.2.16"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "matches 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)",
- "rustc-serialize 0.2.7 (registry+https://github.com/rust-lang/crates.io-index)",
+ "rustc-serialize 0.2.8 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 

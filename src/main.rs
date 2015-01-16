@@ -1,10 +1,4 @@
 extern crate hyper;
-extern crate serialize;
-
-use serialize::{json};
-use std::str::FromStr;
-use std::io::process::{Command, ProcessOutput};
-use std::thread::Thread;
 
 use hyper::client::Client;
 use hyper::client::Response;
@@ -12,33 +6,43 @@ use hyper::header::Headers;
 use hyper::header::shared::qitem;
 use hyper::header::common::{Authorization, Accept, UserAgent};
 use hyper::mime::Mime;
-use hyper::mime::TopLevel::{Application};
 
 //mod git;
+mod env;
 
 fn main() {
-
-	let url = "{env.github.api.url}";
-	let token = String::from_str("token {env.github.api.token}");
-	let agent = String::from_str("octocopycat");
-	//let mime: Mime = FromStr::from_str("application/vnd.github.v3+json").unwrap();
+	let env_config: env::Environment = env::Environment::new("env.toml");	
+	
 	let mut headers = Headers::new();
 	let mut client = Client::new();
 
-	headers.set(Accept(vec![
-		qitem(Mime(Application, "vnd.github.v3+json", vec![]))
-		]));
+	headers.set(UserAgent("octocopycat".to_string()));
+	headers.set(Accept(vec![qitem("application/vnd.github.v3+json".parse().unwrap())]));
 
-	headers.set(Authorization(token));
-	headers.set(UserAgent(agent));
+	// Runtime error: Places "" around value
+	//headers.set(Authorization(env_config.github.token));
+	// Works
+	headers.set(Authorization("token a2b5d215c51f0bcd1ea2428ea840f0d50e336f80".to_string()));
+	
+	println!("{}", headers);
+	
+	// Runtime error: HttpUriError(RelativeUrlWithoutBase)
+	//let url: &str = env_config.github.url.as_slice();
+	// Works
+	let url_slice = "https://api.github.com/orgs/aaa-ncnu-ie/repos";
 
-	let mut response: Response = match client.get(url).headers(headers).send() {
-		Err(msg) => panic!("Failed to connect: {}", msg),
-		Ok(r) => r
+	let mut response: Response = match client.get(url_slice).headers(headers).send() {
+		Ok(r) => r,
+		Err(msg) => panic!("Failed to connect: {:?} .. {}", msg, env_config.github.url)
 	};
+	
+	match response.read_to_string() {
+		Ok(r) => println!("Response: {}", r),
+		Err(msg) => panic!("Error: {}", msg)
+	}
 
 	/*
-	let content = try!(response.read_to_string());
+	
 	let json_body = try!(json::from_str(content.as_slice()));
 
 	let repositories = json_body.as_array().unwrap();
