@@ -1,4 +1,9 @@
+extern crate serialize;
+extern crate alloc;
 extern crate hyper;
+extern crate url;
+
+use serialize::json;
 
 use hyper::client::Client;
 use hyper::client::Response;
@@ -7,57 +12,44 @@ use hyper::header::shared::qitem;
 use hyper::header::common::{Authorization, Accept, UserAgent};
 use hyper::mime::Mime;
 
-//mod git;
+use url::Url;
+
+use alloc::rc::Rc;
+
+mod git;
 mod env;
 
 fn main() {
-	let env_config: env::Environment = env::Environment::new("env.toml");	
+	let env_config: env::Environment = env::get("env.toml");	
 	
 	let mut headers = Headers::new();
 	let mut client = Client::new();
 
 	headers.set(UserAgent("octocopycat".to_string()));
 	headers.set(Accept(vec![qitem("application/vnd.github.v3+json".parse().unwrap())]));
-
-	// Runtime error: Places "" around value
-	//headers.set(Authorization(env_config.github.token));
-	// Works
-	headers.set(Authorization("token a2b5d215c51f0bcd1ea2428ea840f0d50e336f80".to_string()));
+	headers.set(Authorization(env_config.github.token));
 	
-	println!("{}", headers);
+	let url = env_config.github.url.as_slice();
 	
-	// Runtime error: HttpUriError(RelativeUrlWithoutBase)
-	//let url: &str = env_config.github.url.as_slice();
-	// Works
-	let url_slice = "https://api.github.com/orgs/aaa-ncnu-ie/repos";
-
-	let mut response: Response = match client.get(url_slice).headers(headers).send() {
+	let mut response: Response = match client.get(url).headers(headers).send() {
 		Ok(r) => r,
-		Err(msg) => panic!("Failed to connect: {:?} .. {}", msg, env_config.github.url)
+		Err(msg) => panic!("Failed to connect: {:?}", msg)
 	};
 	
-	match response.read_to_string() {
-		Ok(r) => println!("Response: {}", r),
-		Err(msg) => panic!("Error: {}", msg)
-	}
-
-	/*
+	let content = match response.read_to_string() {
+		Ok(c) => c,
+		Err(msg) => panic!("Failed to read content: {}", msg)
+	};
 	
-	let json_body = try!(json::from_str(content.as_slice()));
+	let json_body = match json::from_str(content.as_slice()) {
+		Ok(j) => j,
+		Err(msg) => panic!("Failed to parse JSON")
+	};
 
 	let repositories = json_body.as_array().unwrap();
-	let (tx, rx): (Sender<&str>, Receiver<&str>) = comm::channel();
 
 	for location in repositories.iter() {
-		let url = location.find("ssh_url").unwrap().clone();
-		let thread_tx = tx.clone();
-		Thread::spawn(move || {
-			git::clone(url.as_string().unwrap(), thread_tx)
-		}).detach();
+		let url = location.find("ssh_url").unwrap().to_string();
+		git::clone(url, env_config.workspace.clone())
 	};
-
-	for message in rx.iter() {
-		println!("Message: {}", message)
-	};
-	*/
 }

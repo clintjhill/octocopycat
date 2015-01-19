@@ -1,24 +1,21 @@
 extern crate toml;
 extern crate std;
 
-use self::toml::Value::{Table};
+use self::toml::Value::Table;
 
 pub struct Environment {
-	pub github: GitHub
+	pub github: GitHub,
+  pub workspace: String
 }
 
+// Using String vs. &str to 
+// avoid lifetime issues - still learning.
 pub struct GitHub {
 	pub url: String,
 	pub token: String
 }
 
-impl Environment {
-	pub fn new(config: &str) -> Environment {
-		get(config)
-	}
-}
-
-fn get(config: &str) -> Environment {
+pub fn get(config: &str) -> Environment {
   let path = Path::new(config);
   let display = path.display();
 
@@ -33,12 +30,12 @@ fn get(config: &str) -> Environment {
   };
 
   let mut parser = toml::Parser::new(toml.as_slice());
-	let config = Table(parser.parse().unwrap());
+	let table = Table(parser.parse().unwrap());
 
-	Environment{ 
-		github: GitHub{ 
-			url: config.lookup("github.api.url").unwrap().to_string(),
-			token: config.lookup("github.api.token").unwrap().to_string()
-		} 
-	}
+	// look up toml::Value and unwrap it for the Option<&str> and unwrap it for the string.
+	let url = table.lookup("github.api.url").unwrap().as_str().unwrap().to_string();
+	let token = table.lookup("github.api.token").unwrap().as_str().unwrap().to_string();
+  let workspace = table.lookup("workspace.path").unwrap().as_str().unwrap().to_string();
+
+	Environment{ github: GitHub{ url: url, token: token }, workspace: workspace }
 }
