@@ -3,6 +3,7 @@ extern crate toml;
 use self::toml::Value::Table;
 use std;
 
+#[derive(Clone)]
 pub struct Environment {
 	pub github: GitHub,
   pub workspace: String
@@ -10,6 +11,7 @@ pub struct Environment {
 
 // Using String vs. &str to 
 // avoid lifetime issues - still learning.
+#[derive(Clone)]
 pub struct GitHub {
 	pub url: String,
 	pub token: String
