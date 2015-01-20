@@ -1,7 +1,5 @@
 extern crate serialize;
-extern crate alloc;
 extern crate hyper;
-extern crate url;
 
 use serialize::json;
 
@@ -11,10 +9,6 @@ use hyper::header::Headers;
 use hyper::header::shared::qitem;
 use hyper::header::common::{Authorization, Accept, UserAgent};
 use hyper::mime::Mime;
-
-use url::Url;
-
-use alloc::rc::Rc;
 
 mod git;
 mod env;
@@ -49,7 +43,7 @@ fn main() {
 	let repositories = json_body.as_array().unwrap();
 
 	for location in repositories.iter() {
-		let url = location.find("ssh_url").unwrap().to_string();
+		let url = String::from_str(location.find("ssh_url").unwrap().as_string().unwrap());
 		git::clone(url, env_config.workspace.clone())
 	};
 }

@@ -4,11 +4,8 @@ use std::fmt;
 pub fn clone(url: String, workspace: String) {
 
 	let workspace = Path::new(workspace);
-  let cmd = fmt::format(format_args!("clone {}", url.as_slice()));
 
-  println!("Gitting: {}, {}, {}", url, workspace.display(), cmd);
-
-	match Command::new("git").cwd(&workspace).arg(cmd).output() {
+	match Command::new("git").cwd(&workspace).arg("clone").arg(url).output() {
 		Err(msg) => panic!("Failed to run {}", msg.desc),
 		Ok(ProcessOutput { error: err, output: out, status: exit }) => {
       if exit.success() {
