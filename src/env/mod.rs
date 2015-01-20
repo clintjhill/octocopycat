@@ -1,7 +1,7 @@
 extern crate toml;
-extern crate std;
 
 use self::toml::Value::Table;
+use std;
 
 pub struct Environment {
 	pub github: GitHub,
