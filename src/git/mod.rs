@@ -3,9 +3,7 @@ extern crate serialize;
 
 use self::hyper::client::Client;
 use self::hyper::client::Response;
-use self::hyper::header::Headers;
-use self::hyper::header::shared::qitem;
-use self::hyper::header::common::{Authorization, Accept, UserAgent};
+use self::hyper::header::{Headers, qitem, Authorization, Accept, UserAgent};
 use self::hyper::mime::Mime;
 use std::io::process::{Command, ProcessOutput};
 use std::fmt;
