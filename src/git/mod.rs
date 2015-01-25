@@ -9,24 +9,23 @@ use self::hyper::header::common::{Authorization, Accept, UserAgent};
 use self::hyper::mime::Mime;
 use std::io::process::{Command, ProcessOutput};
 use std::fmt;
+use std::sync::mpsc::Sender;
 use self::serialize::json;
 use env::Environment;
 use std::thread::Thread;
 
-pub fn clone(url: String, workspace: String) {
+pub fn clone(url: String, workspace: String, tx: Sender<String>) {
 
 	let workspace = Path::new(workspace);
 
   Thread::spawn(move || {
     match Command::new("git").cwd(&workspace).arg("clone").arg(url).output() {
-      Err(msg) => panic!("Failed to run {}", msg.desc),
+      Err(msg) => tx.send("Failed to run.".to_string()).unwrap(),
       Ok(ProcessOutput { error: err, output: out, status: exit }) => {
         if exit.success() {
-            let s = String::from_utf8_lossy(out.as_slice());
-            println!("{}\n", s);
+            tx.send(format!("Successful {}.", String::from_utf8_lossy(out.as_slice())).to_string());
         } else {
-            let s = String::from_utf8_lossy(err.as_slice());
-            println!("Failed to clone: {}\n\n", s);
+            tx.send(format!("Failed {}.", String::from_utf8_lossy(err.as_slice())).to_string());
         }
       },
     };
@@ -46,7 +45,10 @@ pub fn repos(env_config: Environment) -> Vec<json::Json> {
   let url = env_config.github.url.as_slice();
   
   let mut response: Response = match client.get(url).headers(headers).send() {
-    Ok(r) => r,
+    Ok(r) => {
+      println!("Successfully retrieved repos for {}.", url);
+      r
+    },
     Err(msg) => panic!("Failed to connect: {:?}", msg)
   };
   

@@ -9,8 +9,6 @@ pub struct Environment {
   pub workspace: String
 }
 
-// Using String vs. &str to 
-// avoid lifetime issues - still learning.
 #[derive(Clone)]
 pub struct GitHub {
 	pub url: String,
