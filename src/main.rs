@@ -16,12 +16,18 @@ fn main() {
 	let (tx, rx): (Sender<String>, Receiver<String>) = mpsc::channel();
 
 	for location in repositories.iter() {
-		let url = String::from_str(location.find("ssh_url").unwrap().as_string().unwrap());
+		let url = match location.find("ssh_url") {
+			Some(url) => match url.as_string() {
+				Some(url) => url.to_string(),
+				None => "no-location".to_string()
+			},
+			None => "no-location".to_string()
+		};
 		let thread_tx = tx.clone();
 		git::clone(url, env_config.workspace.clone(), thread_tx);
 	};
 
 	for threads in repositories.iter() {
-		println!("{}", rx.recv().unwrap());
+		println!("{}", rx.recv().ok().expect("No message received."));
 	}
 }

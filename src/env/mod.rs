@@ -30,12 +30,36 @@ pub fn get(config: &str) -> Environment {
   };
 
   let mut parser = toml::Parser::new(toml.as_slice());
-	let table = Table(parser.parse().unwrap());
+  let table = match parser.parse() {
+    Some(t) => Table(t),
+    None => panic!("couldn't parse: {:?}", parser.errors)
+  };
 
-	// look up toml::Value and unwrap it for the Option<&str> and unwrap it for the string.
-	let url = table.lookup("github.api.url").unwrap().as_str().unwrap().to_string();
-	let token = table.lookup("github.api.token").unwrap().as_str().unwrap().to_string();
-  let workspace = table.lookup("workspace.path").unwrap().as_str().unwrap().to_string();
+  let url = match table.lookup("github.api.url") {
+    Some(url) => match url.as_str() {
+      Some(url) => url.to_string(),
+      None => "no-url".to_string()
+    },
+    None => "no-url".to_string()
+  };
+
+	let token = match table.lookup("github.api.token") {
+    Some(token) => match token.as_str() {
+      Some(token) => token.to_string(),
+      None => "no-token".to_string()
+    },
+    None => "no-token".to_string()
+  };
+
+  let workspace = match table.lookup("workspace.path") {
+    Some(workspace) => match workspace.as_str() {
+      Some(workspace) => workspace.to_string(),
+      None => "no-workspace".to_string()
+    },
+    None => "no-workspace".to_string()
+  };
+
+  println!("URL: {:?}, TOKEN: {:?}, WS: {:?}", url, token, workspace);
 
 	Environment{ github: GitHub{ url: url, token: token }, workspace: workspace }
 }

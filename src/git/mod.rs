@@ -23,7 +23,7 @@ pub fn clone(url: String, workspace: String, tx: Sender<String>) {
         if exit.success() {
             tx.send(format!("Successful {}.", String::from_utf8_lossy(out.as_slice())).to_string());
         } else {
-            tx.send(format!("Failed {}.", String::from_utf8_lossy(err.as_slice())).to_string());
+            tx.send(format!("Failed \n{}\n\n", String::from_utf8_lossy(err.as_slice())).to_string());
         }
       },
     };
@@ -47,7 +47,7 @@ pub fn repos(env_config: Environment) -> Vec<json::Json> {
       println!("Successfully retrieved repos for {}.", url);
       r
     },
-    Err(msg) => panic!("Failed to connect: {:?}", msg)
+    Err(msg) => panic!("Failed to connect: {:?}, {:?}", msg, url)
   };
   
   let content = match response.read_to_string() {
