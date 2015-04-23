@@ -24,7 +24,7 @@ fn main() {
 			None => "no-location".to_string()
 		};
 		let thread_tx = tx.clone();
-		git::clone(url, env_config.workspace.clone(), thread_tx);
+		git::clone(url, env_config.workspace.as_str(), thread_tx);
 	};
 
 	for threads in repositories.iter() {
