@@ -19,7 +19,7 @@ pub fn clone(url: String, workspace: &str, tx: Sender<String>) {
 	let current_dir = Path::new(&workspace);
 
 	thread::spawn(move || {
-		match Command::new("git").current_dir(current_dir).arg("clone").arg(url).output() {
+		match Command::new("git").current_dir(&current_dir).arg("clone").arg(url).output() {
 			Err(msg) => tx.send("Failed to run.".to_string()).unwrap(),
 			Ok(Output { stderr: err, stdout: out, status: exit }) => {
 				if exit.success() {
