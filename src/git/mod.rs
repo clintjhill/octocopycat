@@ -16,7 +16,7 @@ use env::Environment;
 
 pub fn clone(url: String, workspace: &str, tx: Sender<String>) {
 
-	let current_dir = Path::new(workspace);
+	let current_dir = Path::new(&workspace);
 
 	thread::spawn(move || {
 		match Command::new("git").current_dir(current_dir).arg("clone").arg(url).output() {
