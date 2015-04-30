@@ -34,14 +34,14 @@ pub fn clone(url: String, workspace: &str, tx: Sender<String>) {
 }
 
 pub fn repos(env_config: Environment) -> Vec<json::Json> {
-	
+
 	let mut headers = Headers::new();
 	let mut client = Client::new();
 
 	headers.set(UserAgent("octocopycat".to_string()));
 	headers.set(Accept(vec![qitem("application/vnd.github.v3+json".parse().unwrap())]));
 	headers.set(Authorization(env_config.github.token));
-	
+
 	let url = env_config.github.url.as_str();
 
 	let mut response: Response = match client.get(url).headers(headers).send() {
